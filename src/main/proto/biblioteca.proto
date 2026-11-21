@@ -1,0 +1,75 @@
+// Alunos:
+// - Pedro Henrique Carvalho Pereira - 10418861
+// - Mateus Ribeiro Cerqueira - 10443901
+//
+// Serviço BibliotecaService: unary, server streaming, client streaming e bidirectional streaming.
+// Referências: https://grpc.io/docs/languages/java/ | https://protobuf.dev/programming-guides/proto3/
+
+syntax = "proto3";
+
+package biblioteca;
+
+option java_multiple_files = true;
+option java_package = "br.mackenzie.biblioteca.proto";
+option java_outer_classname = "BibliotecaProto";
+
+service BibliotecaService {
+  // Uma requisicao, uma resposta.
+  rpc cadastrarLivro (CadastrarLivroRequest) returns (CadastrarLivroResponse);
+
+  // Uma requisicao, varios livros enviados individualmente.
+  rpc listarLivrosPorAutor (ListarLivrosPorAutorRequest) returns (stream LivroResponse);
+
+  // Varios emprestimos enviados, um unico resumo retornado.
+  rpc registrarEmprestimos (stream RegistrarEmprestimoRequest) returns (ResumoEmprestimosResponse);
+
+  // Mensagens e sugestoes trafegam em duas streams independentes.
+  rpc chatBibliotecario (stream MensagemChatRequest) returns (stream SugestaoLivroResponse);
+}
+
+message CadastrarLivroRequest {
+  string titulo = 1;
+  string autor = 2;
+  int32 ano = 3;
+  string isbn = 4;
+}
+
+message CadastrarLivroResponse {
+  int64 id = 1;
+  string status = 2;
+  string mensagem = 3;
+}
+
+message ListarLivrosPorAutorRequest {
+  string autor = 1;
+}
+
+message LivroResponse {
+  int64 id = 1;
+  string titulo = 2;
+  string autor = 3;
+  int32 ano = 4;
+  string isbn = 5;
+}
+
+message RegistrarEmprestimoRequest {
+  string usuario = 1;
+  int64 livro_id = 2;
+}
+
+message ResumoEmprestimosResponse {
+  int32 total_emprestimos = 1;
+  double tempo_processamento_ms = 2;
+}
+
+message MensagemChatRequest {
+  string palavra_chave = 1;
+}
+
+message SugestaoLivroResponse {
+  string palavra_chave = 1;
+  int64 livro_id = 2;
+  string titulo_sugerido = 3;
+  string autor_sugerido = 4;
+  string mensagem = 5;
+}
