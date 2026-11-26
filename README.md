@@ -9,7 +9,7 @@ Aplicação em Java 17 e Maven que demonstra os quatro tipos de RPC (Unary, Serv
 
 ## Compilação
 
-Dentro da pasta `biblioteca-grpc`:
+Na raiz do projeto (onde está o `pom.xml`):
 
 ```bash
 mvn clean compile
@@ -36,4 +36,13 @@ mvn exec:java -Dexec.mainClass=br.mackenzie.biblioteca.client.ClienteBiblioteca
 
 ## Resultado
 
-FALTA ADICIONAR AS PRINTS 
+### Compilação (`mvn clean package`)
+
+![Build com sucesso](docs/img/01-build.png)
+
+### Execução: servidor (esquerda) e cliente (direita)
+
+O servidor registra o log de cada chamada recebida e o cliente demonstra os quatro tipos de RPC: Unary (`cadastrarLivro`, 4 livros), Server Streaming (`listarLivrosPorAutor`, com autor existente e inexistente), Client Streaming (`registrarEmprestimos`, 5 empréstimos), Bidirectional Streaming (`chatBibliotecario`, 3 mensagens) e o erro `ALREADY_EXISTS` ao cadastrar ISBN duplicado.
+
+![Execução do servidor e do cliente](docs/img/02-execucao-servidor-cliente.png)
+ 
